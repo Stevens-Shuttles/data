@@ -53,7 +53,7 @@ class Route(_GenericDictObj):
 class Shuttle(_GenericDictObj):
     """
     A single shuttle
-    :note: Use a ShuttleService to work with many shuttles in real-time
+    :note: Use a Transloc to work with many shuttles in real-time
     """
 
     def __init__(self, data: Dict, detailed: bool = False):

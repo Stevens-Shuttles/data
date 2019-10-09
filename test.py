@@ -1,6 +1,6 @@
 import time
 
-from lib.ShuttleService import ShuttleService, ShuttleManager
+from Transloc.ShuttleService import ShuttleService, ShuttleManager
 
 
 def main():
