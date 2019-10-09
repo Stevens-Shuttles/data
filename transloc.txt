@@ -1,0 +1,316 @@
+NOTES
+- "Routes" are ordered groups of stops
+- "Stops" are distinct GPS coordinates
+- "Segments" are not looked into, but presumably not very helpful (I could be
+very wrong about that)
+- Timestamps are given in milliseconds since unix epoch time
+
+
+Description
+Get a list of all routes for the given AGENCY_ID (Stevens' ID is 307)
+
+REQUEST
+routes?agencies=AGENCY_ID
+
+RESPONSE
+{
+  routes: [				 # A list of info for each route
+  {
+    agency_id: int,		         # The agency ID that the route belongs to
+    bounds: [float, float, float, float] # Coordinates of route bounding box [lat, long, lat ,long]
+    color: str,		                 # Color of route on map
+    description: str.		         # Description of route (may be empty)
+    id: int,			         # Unique ID for route
+    is_active: bool,		         # Whether the line is currently running
+    long_name: str,		         # Verbose name of the route
+    short_name: str,		         # Abbreviated name of the route
+    text_color: str,		         # Text color on the map
+    type: str,		                 # Currently only set to "bus"
+    url: str			         # Unknown
+    },
+    ...
+  ],
+  success: bool			         # Whether the request succeeded
+}
+
+
+DESCRIPTION
+Get a list of all stops and optionally a list of routes paired with a list of
+the stops that make up that route
+
+REQUEST
+stops?include_routes=BOOL&agencies=AGENCY_ID
+
+RESPONSE
+{
+  routes: [				 # A list of stops for each route
+    {
+      id: int                            # The route ID
+      stops: [                           # The stops, in order, for the route ID
+        int,
+        int,
+	...
+      ],
+    },
+    ...
+  ],
+  stops: [				 # A list of info for each stop
+    {
+      code: int,                         # unknown
+      description: str,                  # Description of the stop
+      id: int,				 # Unique ID for the stop
+      location_type: str,		 # Always set to "stop"
+      name: str,                         # name of the stop
+      parent_station_id: null,		 # unknown
+      position: [float, float],		 # Current latitude, longitude
+      url: str				 # Unknown
+    },
+    ...
+  ]
+  success: bool				 # Whether the request succeeded
+}
+
+
+DESCRIPTION
+Get a list of segments
+
+REQUEST
+segments?agencies=AGENCY_ID
+
+RESPONSE
+{
+  routes: [				 # A list of segments for each route
+    {
+      agency_id: int,			 # The agency ID
+      id: int,				 # The route ID
+      segments: [			 # A list of segment IDs for the route
+        int,
+        int,
+        ...
+      ]
+    },
+    ...
+  ],
+  segments: [				 # A list of info for each segment
+    {
+      id: int,				 # A unique ID for the segment
+      levels: str			 # Unknown
+      points: str			 # Unknown
+    },
+    ...
+  ],
+  success: bool				 # Whether the request succeeded
+}
+
+
+DESCRTIPTION
+Get the current status of each vehicle, as well as recent records of stops(?
+TODO needs verification; this is important)
+
+REQUEST
+vehicle_statuses?agencies=AGENCY_ID
+
+RESPONSE
+{
+  agency_service_statuses: [		 # List of statuses for the requested agencies
+    {
+      agency_id: int,			 # The agency ID
+      vehicle_arrivals_pct: float,       # Unknown (Some kind of stats)
+      scheduled_arrivals_pct: float,     # Unknown (Some kind of stats)
+    },
+    ...
+  ],
+  arrivals: [				# List of arrivals. This is new.
+    {
+      agency_id: int,			# The agency ID
+      vehicle_id: int,			# The vehicle ID
+      stop_id: int,			# The stop ID
+      route_id: int,			# The route ID
+      trip_id: int,			# The trip ID (Unknown)
+      timestamp: int,			# Timestamp of the event (Epoch millis)
+      type: str,			# Always set to "vehicle-based"
+      distance: float,			# Unknown
+      headsign: str,			# Name of line?
+    },
+    ...
+  ]
+  vehicles: [				# List of info for each vehicle
+    {
+      id: int,				# A unique ID for the vehivle
+      num_cars: null,			# Unknown
+      service_status: str,		# Only seen so far as "in_service"
+      agency_id: int,			# The agency ID
+      route_id: int,			# The current route ID
+      call_name: int,			# Unknown
+      current_stop_id: null,		# Stop that the shuttle is currently at? (unverified)
+      arrival_status: str,		# Observed values so far: ["N/A", "Late"]
+      position: [float, float],		# Position of the vehicle [lat, long] as of "timestamp"
+      heading: int,			# Compass direction
+      speed: int,			# Vehicle speed (mph?)
+      segment_id: int,			# The segment of the route?
+      off_route: bool,			# Whether the vehicle is on the correct path
+      timestamp: int,			# The timestamp of this data
+      load: null,			# Probably how full the vehicle is, but currently unused
+      apc_status: str			# Unknown
+    },
+    ...
+  ]
+}
+NOTES
+- "Routes" are ordered groups of stops
+- "Stops" are distinct GPS coordinates
+- "Segments" are not looked into, but presumably not very helpful (I could be
+very wrong about that)
+- Timestamps are given in milliseconds since unix epoch time
+
+
+Description
+Get a list of all routes for the given AGENCY_ID (Stevens' ID is 307)
+
+REQUEST
+routes?agencies=AGENCY_ID
+
+RESPONSE
+{
+  routes: [				 # A list of info for each route
+  {
+    agency_id: int,		         # The agency ID that the route belongs to
+    bounds: [float, float, float, float] # Coordinates of route bounding box [lat, long, lat ,long]
+    color: str,		                 # Color of route on map
+    description: str.		         # Description of route (may be empty)
+    id: int,			         # Unique ID for route
+    is_active: bool,		         # Whether the line is currently running
+    long_name: str,		         # Verbose name of the route
+    short_name: str,		         # Abbreviated name of the route
+    text_color: str,		         # Text color on the map
+    type: str,		                 # Currently only set to "bus"
+    url: str			         # Unknown
+    },
+    ...
+  ],
+  success: bool			         # Whether the request succeeded
+}
+
+
+DESCRIPTION
+Get a list of all stops and optionally a list of routes paired with a list of
+the stops that make up that route
+
+REQUEST
+stops?include_routes=BOOL&agencies=AGENCY_ID
+
+RESPONSE
+{
+  routes: [				 # A list of stops for each route
+    {
+      id: int                            # The route ID
+      stops: [                           # The stops, in order, for the route ID
+        int,
+        int,
+	...
+      ],
+    },
+    ...
+  ],
+  stops: [				 # A list of info for each stop
+    {
+      code: int,                         # unknown
+      description: str,                  # Description of the stop
+      id: int,				 # Unique ID for the stop
+      location_type: str,		 # Always set to "stop"
+      name: str,                         # name of the stop
+      parent_station_id: null,		 # unknown
+      position: [float, float],		 # Current latitude, longitude
+      url: str				 # Unknown
+    },
+    ...
+  ]
+  success: bool				 # Whether the request succeeded
+}
+
+
+DESCRIPTION
+Get a list of segments
+
+REQUEST
+segments?agencies=AGENCY_ID
+
+RESPONSE
+{
+  routes: [				 # A list of segments for each route
+    {
+      agency_id: int,			 # The agency ID
+      id: int,				 # The route ID
+      segments: [			 # A list of segment IDs for the route
+        int,
+        int,
+        ...
+      ]
+    },
+    ...
+  ],
+  segments: [				 # A list of info for each segment
+    {
+      id: int,				 # A unique ID for the segment
+      levels: str			 # Unknown
+      points: str			 # Unknown
+    },
+    ...
+  ],
+  success: bool				 # Whether the request succeeded
+}
+
+
+DESCRTIPTION
+Get the current status of each vehicle, as well as recent records of stops(?
+TODO needs verification; this is important)
+
+REQUEST
+vehicle_statuses?agencies=AGENCY_ID
+
+RESPONSE
+{
+  agency_service_statuses: [		 # List of statuses for the requested agencies
+    {
+      agency_id: int,			 # The agency ID
+      vehicle_arrivals_pct: float,       # Unknown (Some kind of stats)
+      scheduled_arrivals_pct: float,     # Unknown (Some kind of stats)
+    },
+    ...
+  ],
+  arrivals: [				# List of arrivals. This is new.
+    {
+      agency_id: int,			# The agency ID
+      vehicle_id: int,			# The vehicle ID
+      stop_id: int,			# The stop ID
+      route_id: int,			# The route ID
+      trip_id: int,			# The trip ID (Unknown)
+      timestamp: int,			# Timestamp of the event (Epoch millis)
+      type: str,			# Always set to "vehicle-based"
+      distance: float,			# Unknown
+      headsign: str,			# Name of line?
+    },
+    ...
+  ]
+  vehicles: [				# List of info for each vehicle
+    {
+      id: int,				# A unique ID for the vehivle
+      num_cars: null,			# Unknown
+      service_status: str,		# Only seen so far as "in_service"
+      agency_id: int,			# The agency ID
+      route_id: int,			# The current route ID
+      call_name: int,			# Unknown
+      current_stop_id: null,		# Stop that the shuttle is currently at? (unverified)
+      arrival_status: str,		# Observed values so far: ["N/A", "Late"]
+      position: [float, float],		# Position of the vehicle [lat, long] as of "timestamp"
+      heading: int,			# Compass direction
+      speed: int,			# Vehicle speed (mph?)
+      segment_id: int,			# The segment of the route?
+      off_route: bool,			# Whether the vehicle is on the correct path
+      timestamp: int,			# The timestamp of this data
+      load: null,			# Probably how full the vehicle is, but currently unused
+      apc_status: str			# Unknown
+    },
+    ...
+  ]
+}
