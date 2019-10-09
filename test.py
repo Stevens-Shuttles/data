@@ -4,7 +4,7 @@ from Transloc.ShuttleService import ShuttleService, ShuttleManager
 
 
 def main():
-    # A ShuttleManager is basically an auto-updating list of SHuttles
+    # A ShuttleManager is basically an auto-updating list of Shuttles
     sm = ShuttleManager(307)
     # A ShuttleService is how we access the API
     ss = ShuttleService(307)
