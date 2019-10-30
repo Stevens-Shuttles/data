@@ -1,4 +1,4 @@
-from datetime import datetime, timezone, timedelta
+from datetime import datetime
 from typing import Dict, List, Tuple
 
 import requests
@@ -76,6 +76,25 @@ class Shuttle(_GenericDictObj):
 
         self.position = tuple(self.position)
         self.timestamp = datetime.fromtimestamp(float(self.timestamp) / 1000, tz=pytz.utc)
+
+    def as_serializable_dict(self) -> Dict:
+        """
+        Return a dictionary representation of this Shuttle which can be safely serialized as a JSON object
+        """
+        if self._ss is not None:
+            raise NotImplementedError("Serialization is not yet implemented for 'detailed' Shuttles")
+
+        def serialize(obj):
+            if isinstance(obj, datetime):
+                if obj.tzinfo is not None:
+                    return obj.timestamp()
+                else:
+                    raise ValueError("Will not serialize a naive datetime object. Add a timezone")
+
+        serializable_dict = self.__dict__.copy()
+        serializable_dict["timestamp"] = serialize(serializable_dict["timestamp"])
+
+        return serializable_dict
 
     def update(self, detailed: bool = False):
         """
