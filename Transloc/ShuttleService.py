@@ -1,4 +1,6 @@
 from datetime import datetime
+from decimal import Decimal
+import json
 from typing import Dict, List, Tuple
 
 import requests
@@ -89,10 +91,9 @@ class Shuttle(_GenericDictObj):
                 if obj.tzinfo is not None:
                     return obj.timestamp()
                 else:
-                    raise ValueError("Will not serialize a naive datetime object. Add a timezone")
+                    raise TypeError("Will not serialize a naive datetime object. Add a timezone")
 
-        serializable_dict = self.__dict__.copy()
-        serializable_dict["timestamp"] = serialize(serializable_dict["timestamp"])
+        serializable_dict = json.loads(json.dumps(self.__dict__, default=serialize), parse_float=Decimal)
 
         return serializable_dict
 
