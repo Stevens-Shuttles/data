@@ -5,17 +5,17 @@ import boto3
 from Transloc.ShuttleService import ShuttleService, ShuttleManager
 
 
-def handler(event, context):
-    # A ShuttleManager is basically an auto-updating list of Shuttles
-    sm = ShuttleManager(307)
+sm = ShuttleManager(307)
     
-    dynamodb = boto3.resource("dynamodb")
+dynamodb = boto3.resource("dynamodb")
     
-    table = dynamodb.Table("shuttles")
+table = dynamodb.Table("shuttles")
 
+
+def handler(event, context):    
     start_time = time.time()
     with table.batch_writer(overwrite_by_pkeys=["id", "timestamp"]) as writer:
-        while True:
+        for _ in range(5):
             for shuttle in sm.shuttles():
                 # print(shuttle.as_serializable_dict())
                 writer.put_item(Item = shuttle.as_serializable_dict())
